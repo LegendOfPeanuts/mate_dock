@@ -1,6 +1,6 @@
 # Red Button Detection
 
-This directory contains the c++ code for detecting the red button in the MATE 2023 task.
+This directory contains the code for detecting the red button in the MATE 2023 task.
 
 ## Workflow
 1. Define color range
