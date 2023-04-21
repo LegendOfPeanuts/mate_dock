@@ -78,8 +78,10 @@ def create_sliders(window_name):
 def on_trackbar(*args):
     pass
 
+video_path = "videos/red_button_closing_in.MP4"
 # Initialize the video capture
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(video_path)
 
 if not cap.isOpened():
     print("[Error] Webcam not accessible")
@@ -92,49 +94,59 @@ cv2.namedWindow("Sliders")
 create_sliders("Sliders")
 
 while True:
-    # Read a frame
+    while cap.isOpened():
+        # Read a frame
 
-    path = "red-round-glossy-button-isolated.png"
-    #path = "biofoul.png"
-    #path = "seagrass.png"
+        #path = "red-round-glossy-button-isolated.png"
+        #path = "biofoul.png"
+        #path = "seagrass.png"
 
 
-    frame = cv2.imread(path)
-    #ret, frame = cap.read()
+        #frame = cv2.imread(path)
+        ret, frame = cap.read()
 
-    # Preprocess the frame
-    preprocessed_frame = preprocess_frame(frame)
+        # Check if the frame is empty
+        if not ret:
+            print("[Warning] Frame skipped")
+            continue
 
-    # Get the color range from sliders
-    lower_h = cv2.getTrackbarPos("Lower H", "Sliders")
-    upper_h = cv2.getTrackbarPos("Upper H", "Sliders")
-    lower_s = cv2.getTrackbarPos("Lower S", "Sliders")
-    upper_s = cv2.getTrackbarPos("Upper S", "Sliders")
-    lower_v = cv2.getTrackbarPos("Lower V", "Sliders")
-    upper_v = cv2.getTrackbarPos("Upper V", "Sliders")
-    lower_color = np.array([lower_h, lower_s, lower_v])
-    upper_color = np.array([upper_h, upper_s, upper_v])
-    erode = cv2.getTrackbarPos("Erode Iterations", "Sliders")
-    dilate = cv2.getTrackbarPos("Dilate Iterations", "Sliders")
+        frame = cv2.resize(frame, (640, 480))
 
-    # Apply color thresholding
-    color_mask = apply_color_threshold(preprocessed_frame, lower_color, upper_color, erode, dilate)
+        # Preprocess the frame
+        preprocessed_frame = preprocess_frame(frame)
 
-    # Find the red button and its center
-    button_contour, button_center = find_red_button(color_mask)
+        # Get the color range from sliders
+        lower_h = cv2.getTrackbarPos("Lower H", "Sliders")
+        upper_h = cv2.getTrackbarPos("Upper H", "Sliders")
+        lower_s = cv2.getTrackbarPos("Lower S", "Sliders")
+        upper_s = cv2.getTrackbarPos("Upper S", "Sliders")
+        lower_v = cv2.getTrackbarPos("Lower V", "Sliders")
+        upper_v = cv2.getTrackbarPos("Upper V", "Sliders")
+        lower_color = np.array([lower_h, lower_s, lower_v])
+        upper_color = np.array([upper_h, upper_s, upper_v])
+        erode = cv2.getTrackbarPos("Erode Iterations", "Sliders")
+        dilate = cv2.getTrackbarPos("Dilate Iterations", "Sliders")
 
-    # Draw the detected red button and its center
-    draw_red_button(frame, button_contour, button_center)
+        # Apply color thresholding
+        color_mask = apply_color_threshold(preprocessed_frame, lower_color, upper_color, erode, dilate)
 
-    # Show the processed frame and the mask
-    cv2.imshow("Frame", frame)
-    cv2.imshow("Preprocessed", preprocessed_frame)
-    cv2.imshow("Mask", color_mask)
+        # Find the red button and its center
+        button_contour, button_center = find_red_button(color_mask)
 
-    # Check if the user wants to exit
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        # Draw the detected red button and its center
+        draw_red_button(frame, button_contour, button_center)
 
-# Release the video capture and close all windows
+        # Show the processed frame and the mask
+        cv2.imshow("Frame", frame)
+        cv2.imshow("Preprocessed", preprocessed_frame)
+        cv2.imshow("Mask", color_mask)
+
+        # Check if the user wants to exit
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+    # Release the video capture and close all windows
 cap.release()
 cv2.destroyAllWindows()
