@@ -30,8 +30,9 @@ Run the following command in terminal:
 
 1. Position the rov directly in front of the dock
 2. Start the script
-3. Release control from the control station
-4. Wait for the ROV to dock
-5. Script disengages upon completion (or failure)
+3. Make sure the red button is detected
+4. Press ``s`` in the ``Frame`` window and release control from the control station
+5. Wait for the ROV to dock
+6. Script disengages upon completion (or failure)
 
 Last updated: 06-05-2023
