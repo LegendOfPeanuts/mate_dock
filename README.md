@@ -26,4 +26,12 @@ pip3 install pymavlink
 Run the following command in terminal:
 ```python3 main.py```
 
+# Procedures for pilot
+
+1. Position the rov directly in front of the dock
+2. Start the script
+3. Release control from the control station
+4. Wait for the ROV to dock
+5. Script disengages upon completion (or failure)
+
 Last updated: 06-05-2023

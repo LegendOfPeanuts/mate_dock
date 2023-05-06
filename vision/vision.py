@@ -88,7 +88,7 @@ class RedButtonDetector:
                 ret, frame = self.cap.read()
 
                 if not ret:
-                    print("[Warning] Frame skipped")
+                    self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
                     continue
 
                 frame = cv2.resize(frame, (640, 480))
@@ -116,7 +116,7 @@ class RedButtonDetector:
                 cv2.imshow("Preprocessed", preprocessed_frame)
                 cv2.imshow("Mask", color_mask)
 
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(16) & 0xFF == ord('q'):
                     break
 
             self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
