@@ -25,3 +25,5 @@ pip3 install pymavlink
 
 Run the following command in terminal:
 ```python3 main.py```
+
+Last updated: 06-05-2023
